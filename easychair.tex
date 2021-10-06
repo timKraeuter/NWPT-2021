@@ -1,0 +1,111 @@
+% easychair.tex,v 3.5 2017/03/15
+
+\documentclass[a4paper]{easychair}
+%\documentclass[EPiC]{easychair}
+%\documentclass[EPiCempty]{easychair}
+%\documentclass[debug]{easychair}
+%\documentclass[verbose]{easychair}
+%\documentclass[notimes]{easychair}
+%\documentclass[withtimes]{easychair}
+%\documentclass[a4paper]{easychair}
+%\documentclass[letterpaper]{easychair}
+
+\usepackage{doc}
+
+% use this if you have a long article and want to create an index
+% \usepackage{makeidx}
+
+% In order to save space or manage large tables or figures in a
+% landcape-like text, you can use the rotating and pdflscape
+% packages. Uncomment the desired from the below.
+%
+% \usepackage{rotating}
+% \usepackage{pdflscape}
+
+% Some of our commands for this guide.
+%
+\newcommand{\easychair}{\textsf{easychair}}
+\newcommand{\miktex}{MiK{\TeX}}
+\newcommand{\texniccenter}{{\TeX}nicCenter}
+\newcommand{\makefile}{\texttt{Makefile}}
+\newcommand{\latexeditor}{LEd}
+
+%\makeindex
+
+%% Front Matter
+%%
+% Regular title as in the article class.
+%
+\title{Heterogeneous behavioral model composition \\
+        using graph grammars}
+
+% Authors are joined by \and. Their affiliations are given by \inst, which indexes
+% into the list defined using \institute
+%
+\author{
+Tim Kräuter\inst{1}
+}
+
+% Institutes for affiliations are also joined by \and,
+\institute{
+  Høgskulen på Vestlandet\\
+  Bergen, Norway\\
+  \email{tkra@hvl.no}
+ }
+
+%  \authorrunning{} has to be set for the shorter version of the authors' names;
+% otherwise a warning will be rendered in the running heads. When processed by
+% EasyChair, this command is mandatory: a document without \authorrunning
+% will be rejected by EasyChair
+
+\authorrunning{Mokhov, Sutcliffe and Voronkov}
+
+% \titlerunning{} has to be set to either the main title or its shorter
+% version for the running heads. When processed by
+% EasyChair, this command is mandatory: a document without \titlerunning
+% will be rejected by EasyChair
+\titlerunning{The {\easychair} Class File}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+TODO: Something like this:
+  MDE used to model complex system because of separation of concerns. However, one wants to still argue about the whole/composite system. This lead to model composition operators for structural and behavioral models. We propose a formal approach for the composition of heterogeneous behavioral models describing discrete behavior.
+  Something with async and sync.
+\end{abstract}
+
+% 2-3 pages abstract
+
+%------------------------------------------------------------------------------
+\section{Introduction}
+
+% Similar motivation to the kienzle paper. Separation of concerns but everything still describes the same system at the end. Thats why we need to compose everything to execute the app or reason about global properties
+% Approaches for homogeneous composition \cite kienzle with good outlook for heterogeneous. We propose a different approach for heteregeneous composition which is more high-level and hopefully nearer to actual system development: synch/asnch behavior vs causality/synch. We are also now respecting structure, i.e. are more flexible.
+
+\section{Prototypical validation}
+Use some github repo to implement an example of the whole fiesta in groove.
+
+\section{Related work}
+\cite{kienzleUnifyingFrameworkHomogeneous2019}:
+Parallels between event structures as their underlying formalism and my approach.
+Try to argue why my approach might be better (including dataflow in the future, data can be modelled by graphs which we operate on and can exchange easily.)
+
+\cite{krauterBehavioralConsistencyHeterogeneous2021}: my own work.
+\section{Acknowledgments} \label{sect:acks}
+The author would like to thank his supervisors Adrian Rutle, Harald König, and Yngve Lamo for fruitful discussions about the topic.
+\label{sect:bib}
+\bibliographystyle{plain}
+%\bibliographystyle{alpha}
+%\bibliographystyle{unsrt}
+%\bibliographystyle{abbrv}
+\bibliography{easychair}
+
+%------------------------------------------------------------------------------
+% Index
+%\printindex
+
+%------------------------------------------------------------------------------
+\end{document}
+

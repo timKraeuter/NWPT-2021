@@ -43,7 +43,7 @@
 % into the list defined using \institute
 %
 \author{
-Tim Kräuter\inst{1}
+Tim Kräuter
 }
 
 % Institutes for affiliations are also joined by \and,
@@ -83,13 +83,13 @@ Tim Kräuter\inst{1}
 %------------------------------------------------------------------------------
 \section{Introduction}
 % Introduction/Motivation
-One method to handle the increasing complexity of software systems is the use of \gls{mde}.
+A common approach to handle the increasing complexity of software systems is the use of \gls{mde}.
 \gls{mde} leads to a clear separation of concerns by modeling each aspect of a system separately \cite{franceModeldrivenDevelopmentComplex2007}.
 However, these individual models have to be composed if one wants to execute the system or argue about global properties \cite{kienzleUnifyingFrameworkHomogeneous2019}.
 
 % Narrowing down
 Our contribution addresses the problem on how the individual models can be composed to one model describing the entire software system, even if the used models are heterogeneous, i.e., do not conform to the same modeling language.
-We address the combination of behavioral models since the composition of structural models has been the focus of a significant amount of research already, for example in \cite{kienzleUnifyingFrameworkHomogeneous2019, klareCommonalitiesPreservingConsistency2019, stunkelComprehensiveSystemsFormal2021}.
+In particular, we address the composition of behavioral models since its structural counterpart has been the focus of a significant amount of research already, for example in \cite{kienzleUnifyingFrameworkHomogeneous2019, klareCommonalitiesPreservingConsistency2019, stunkelComprehensiveSystemsFormal2021}.
 We further limit the behavioral models to the ones describing discrete behavior such as finite state machines, \gls{bpmn} diagrams, process algebras and petri-nets. % Untimed variants and only a subset of BPMN.
 
 \section{Heterogeneous behavioral model composition}
@@ -106,9 +106,9 @@ Defining synchronous communication leads to two components becoming active at th
 % make this a step to differentiate everything a bit better
 Interactions among a set of behavioral models can then be defined using synchronous or asynchronous communication.
 However, not any element in a behavioral model can be part of an interaction.
-For example, it does not make sense to define that a state in a state machine should communicate with a transition in a petri-net, since a state does not describe change or can be executed.
+For example, it does not make sense to define that a state in a state machine should communicate with a transition in a petri-net, since a state represents static information.
 Consequently, only certain elements in each behavioral model, for example transitions in state machines and transitions in petri-nets should be used when defining interactions between behavioral models.
-One can achieve these restrictions by aligning the metamodels of the respective behavioral metamodels, as described in \cite{krauterBehavioralConsistencyHeterogeneous2021}.
+One can achieve these restrictions by creating and aligning the metamodels of the respective behavioral models, as described in \cite{krauterBehavioralConsistencyHeterogeneous2021}.
 
 % 2. Step: Translate the models to a semantic domain/base language and combine them according to the defined relations. We propose graph grammars. Explain how both primitive relations are implemented
 % Each behavioral model has to be converted to a graph grammar (automatic algorithm based on the used modeling language).

@@ -137,7 +137,6 @@ Asynchronous communication influences the global system behavior by forcing two 
 
 \section{Use case: hierarchical composition}
 Highlight the approach by implementing a simple example of hierarchical composition
-% Use some github repo to implement an example of the whole fiesta in groove. Maybe the hierarchical composition.
 
 \begin{figure}[h]
     \centering
@@ -145,6 +144,9 @@ Highlight the approach by implementing a simple example of hierarchical composit
     \caption{Hierarchical composition of a state machine and a \gls{bpmn} process model}
     \label{fig:useCase}
 \end{figure}
+We implemented the hierarchical composition example from \autoref{fig:useCase} in Groove\footnote{\url{https://github.com/timKraeuter/NWPT-2021/tree/main/groove}}. % TODO repo is not public yet
+Groove is a tool set that supports creating and executing \glspl{gg} among other things \cite{ghamarianModellingAnalysisUsing2012, rensinkGROOVESimulatorTool2004}.
+We created the \gls{gg} which describes the behavior of the semantic system by hand in Groove and executed it to check its validity.
 
 \section{Related work}
 This contribution extends our work in \cite{krauterBehavioralConsistencyHeterogeneous2021} by adding asynchronous communication and TODO.

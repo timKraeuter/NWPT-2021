@@ -8,4 +8,9 @@ java -jar Simulator.jar
 Then load the example by clicking ```File < Open```.
 - Hierarchical_SM_BPMN.gps (Hierarchical composition example of the abstract).
 
-Groove [basic tutorial](https://www.youtube.com/watch?v=R2beaSQ9-NM&t=626s).
+## Further resources:
+- Groove Demo: [Basic functionality](https://www.youtube.com/watch?v=R2beaSQ9-NM&t=626s).
+- Groove Demo: [Editing Graphs and Rules](https://www.youtube.com/watch?v=R2beaSQ9-NM).
+- Groove Demo: [Type Graphs](https://www.youtube.com/watch?v=LTGRS3AYSSM&t=22s).
+
+Feel free to contact me for further information.

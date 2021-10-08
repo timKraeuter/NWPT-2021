@@ -54,7 +54,7 @@ Tim Kräuter
 
 \newacronym{mde}{MDE}{Model-driven engineering}
 \newacronym[
-    shortplural={GG's},
+    shortplural={GGs},
     longplural={graph grammars}
 ]{gg}{GG}{graph grammar}
 \newacronym{bpmn}{BPMN}{Business Process Modeling Notation}
@@ -123,7 +123,7 @@ Synchronous rules can have two or more participants from distinct behavioral mod
     \label{fig:synchAsynchInteractions}
 \end{figure}
 
-Asynchronous communication will lead to rules being enriched not merged.
+Asynchronous communication will lead to rules being enriched, not merged.
 An asynchronous interaction has a direction and links only two model elements.
 It will lead to the creation and consumption of a unique message node. 
 An example can be seen on the right of \autoref{fig:synchAsynchInteractions}.
@@ -140,7 +140,7 @@ As a simple use case, we want to show how we can use our approach to implement t
 The behavior of one behavioral model is often extended by other models that describe what happens in certain parts of the model in more detail.
 
 In \autoref{fig:useCase}, we have a state machine and a \gls{bpmn} process model where the behavior of the state \texttt{Processing} is described by the \gls{bpmn} process model.
-This means when the state \texttt{Processing} is entered, a \gls{bpmn} process should be started and the state can only be exited when this process has finished.
+This means when the state \texttt{Processing} is entered, a \gls{bpmn} process should be started, and the state can only be exited when this process has finished.
 We can achieve this by synchronizing transition \textit{b} with the \textit{start event} and transition \textit{c} with the end event in the \gls{bpmn} process model, as highlighted by the cyan connections in \autoref{fig:useCase}.
 
 \begin{figure}[h]
@@ -157,7 +157,7 @@ We created the \gls{gg}, which describes the behavior of the composite system by
 This contribution extends our work in \cite{krauterBehavioralConsistencyHeterogeneous2021} by adding asynchronous communication and a use case showing how to implement hierarchical composition.
 % maybe structural aspects
 
-In \cite{kienzleUnifyingFrameworkHomogeneous2019}, event structures with event scheduling are proposed to realize behavioral combination.
+In \cite{kienzleUnifyingFrameworkHomogeneous2019}, event structures with event scheduling is proposed to realize behavioral combination.
 The authors also convert each behavioral model to their chosen formalism (event structures instead of \glspl{gg}) and combine the models in that formalism.
 The combination is based on event scheduling, i.e., adding causal relations between the events of the event structures representing the behavioral models.
 This will then lead to an event structure describing the behavior of the composite system similar to our approach.

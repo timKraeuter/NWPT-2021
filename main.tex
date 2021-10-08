@@ -1,14 +1,6 @@
 % easychair.tex,v 3.5 2017/03/15
 
 \documentclass[a4paper]{easychair}
-%\documentclass[EPiC]{easychair}
-%\documentclass[EPiCempty]{easychair}
-%\documentclass[debug]{easychair}
-%\documentclass[verbose]{easychair}
-%\documentclass[notimes]{easychair}
-%\documentclass[withtimes]{easychair}
-%\documentclass[a4paper]{easychair}
-%\documentclass[letterpaper]{easychair}
 
 \usepackage{doc}
 
@@ -21,14 +13,6 @@
 %
 % \usepackage{rotating}
 % \usepackage{pdflscape}
-
-% Some of our commands for this guide.
-%
-\newcommand{\easychair}{\textsf{easychair}}
-\newcommand{\miktex}{MiK{\TeX}}
-\newcommand{\texniccenter}{{\TeX}nicCenter}
-\newcommand{\makefile}{\texttt{Makefile}}
-\newcommand{\latexeditor}{LEd}
 
 %\makeindex
 
@@ -69,6 +53,10 @@ Tim Kräuter
 \usepackage{glossaries}
 
 \newacronym{mde}{MDE}{Model-driven engineering}
+\newacronym[
+    shortplural={GG's},
+    longplural={graph grammars}
+]{gg}{GG}{graph grammar}
 \newacronym{bpmn}{BPMN}{Business Process Modeling Notation}
 \newacronym{ct}{CT}{category theory}
 \newacronym{uml}{UML}{Unified Modeling Language}
@@ -96,29 +84,50 @@ We further limit the behavioral models to those describing discrete behavior suc
 We assume that each behavioral model describes a component of the overall system running independently and in parallel to other components as long as no relation to any other component is defined.
 However, components, i.e., behavioral models, must interact to realize a meaningful composite system behavior.
 
-% 1. Step: Relate models. We suggest 2 primitives to relate behavioral models: synchronous and asynchronous communication
-% We support synchronous and asynchronous communication (currently without data).
+% We suggest 2 primitives to relate behavioral models: synchronous and asynchronous communication (currently without data).
 Our approach supports two types of interactions between behavioral models: \textit{synchronous} and \textit{asynchronous} communication.
 One can use synchronous communication to model that one component acquires a resource realized as a separate model since it is shared across the entire system.
 Asynchronous communication can, for example, be used to model that two components communicate using a messaging system or by writing/consuming files in a shared file system.
 Defining synchronous communication leads to two components becoming active simultaneously, while asynchronous communication only requires one component to be active. 
 
-% make this a step to differentiate everything a bit better
-Interactions among a set of behavioral models can then be defined using synchronous or asynchronous communication.
+Our model composition approach can be separated into three steps.
+% 1. Step: Relate models by defining interactions.
+The first step is to define interactions among a set of behavioral models using synchronous and asynchronous communication.
 However, not any element in a behavioral model can be part of an interaction.
 For example, it does not make sense to define that a state in a state machine should communicate with a transition in a Petri net since a state represents static information.
 Consequently, only certain elements in each behavioral model, such as transitions in state machines and Petri nets, should be used when defining interactions between behavioral models.
 One can achieve these restrictions by creating and aligning the metamodels of the respective behavioral models, as described in \cite{krauterBehavioralConsistencyHeterogeneous2021}.
 
-% 2. Step: Translate the models to a semantic domain/base language and combine them according to the defined relations. We propose graph grammars. Explain how both primitive relations are implemented
-% Each behavioral model has to be converted to a graph grammar (automatic algorithm based on the used modeling language).
-% All graph grammars are merged respecting the communication specified between them. Describe how the merge happens. (Merged/parallel rules for synch and enriched rules for asynch).
+% 2. Step: Translate the models to a semantic domain/base language and combine them according to the defined relations. We propose graph grammars. Explain how both primitive relations are implemented.
+In the second step of our approach we will use \glspl{gg} to realize the behavioral semantics of the individual models and their combination as defined by the interactions.
+However, one could also choose a different formalism than \glspl{gg} in this step.
 
+For the second step there has to be an implementation of each behavioral formalism using \glspl{gg}.
+Implementations for finite state machines and Petri nets were defined in \cite{krauterBehavioralConsistencyHeterogeneous2021}.
+Consequently, we can (automatically) map each model to a \gls{gg} which represent the behavior of that model.
+Afterwards, all \glspl{gg} are combined into one respecting the interactions defined earlier.
 
-% Communication can be added between the behavioral models (only between the elements aligned in the respective metamodels).
+The start graph of the \gls{gg} describing the composite system is given by the sum of all start graphs of the individual \glspl{gg}.
+The elements related in step one have been transformed to \gls{gg} rules which will be combined now.
+All non-related \gls{gg} rules are kept unchanged for the composite system.
 
+Rules which are related by synchronous communication are merged into one \textit{parallel production rule}, formally defined using \gls{ct} in \cite[Def. 3.2.7]{baldanConcurrentSemanticsAlgebraic1999}.
+This forces both rules to be executed simultaneously in one rule application step. 
+An example for a rule created by synchronous communication can be seen on the left of \autoref{fig:synchAsynchInteractions}.
+Synchronous rules can have two or more participants from distinct behavioral models.  
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{images/synch_asynch.pdf}
+    \caption{\gls{gg} rules for synchronous and asynchronous interactions}
+    \label{fig:synchAsynchInteractions}
+\end{figure}
 
+Asynchronous communication will lead to rules being enriched not merged.
+An asynchronous interaction has a direction and links only two model elements.
+It will lead to the creation and consumption of a unique message node. 
+An example can be seen on the right of \autoref{fig:synchAsynchInteractions}.
+Asynchronous communication influences the global system behavior by forcing two previously unrelated rules to be executed in a certain order.
 
 % Include the structural aspects to have multiple instances of a model without repeating it (if the same communication protocol is used between these models).
 
@@ -126,16 +135,32 @@ One can achieve these restrictions by creating and aligning the metamodels of th
 
 % Overall system can be executed and properties can be checked on the state space generated by the graph grammar (link to my models paper for more information on how to do this in detail).
 
-\section{Prototypical validation}
-Use some github repo to implement an example of the whole fiesta in groove. Maybe the hierarchical composition.
+\section{Use case: hierarchical composition}
+Highlight the approach by implementing a simple example of hierarchical composition
+% Use some github repo to implement an example of the whole fiesta in groove. Maybe the hierarchical composition.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=.5\textwidth]{images/usecase.pdf}
+    \caption{Hierarchical composition of a state machine and a \gls{bpmn} process model}
+    \label{fig:useCase}
+\end{figure}
 
 \section{Related work}
-\cite{krauterBehavioralConsistencyHeterogeneous2021}: my own work.
-Tell what exactly is new in this abstract/presentation
+This contribution extends our work in \cite{krauterBehavioralConsistencyHeterogeneous2021} by adding asynchronous communication and TODO.
+% maybe structural aspects
+% maybe new use case: hierarchical composition
+% maybe new modelling language bpmn?
 
-\cite{kienzleUnifyingFrameworkHomogeneous2019}:
-Parallels between event structures as their underlying formalism and my approach.
-Try to argue why my approach might be better (including dataflow in the future, data can be modelled by graphs which we operate on and can exchange easily. Visualization of the execution is easier since GG operate directly in the source language, when checking properties visualizing counterexamples if properties are not fulfilled is also easier.)
+In \cite{kienzleUnifyingFrameworkHomogeneous2019} event structures with event scheduling are proposed to realize behavioral combination.
+The authors also convert each behavioral model to their chosen formalism (event structures instead of \glspl{gg}) and combine the models in that formalism.
+The combination is based on event scheduling, i.e., adding causal relations between the events of the event structures representing the behavioral models.
+This will then lead to an event structure describing the behavior of the composite system similar to our approach.
+
+% we stay closer to the original models: visualization of execution and counterexample should be easier. Since the step back to the original language is not that far.
+
+% Parallels between event structures as their underlying formalism and my approach.
+% Try to argue why my approach might be better (including dataflow in the future, data can be modelled by graphs which we operate on and can exchange easily. Visualization of the execution is easier since GG operate directly in the source language, when checking properties visualizing counterexamples if properties are not fulfilled is also easier.)
 
 \section{Acknowledgments} \label{sect:acks}
 The author would like to thank his supervisors Adrian Rutle, Harald König, and Yngve Lamo for fruitful discussions about the topic.

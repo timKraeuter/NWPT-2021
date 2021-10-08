@@ -6,6 +6,6 @@ Run the example using by executing the following command in the bin directory:
 java -jar Simulator.jar
 ```
 Then load the example by clicking ```File < Open```.
-- Hierarchical_SM_BPMN.gps (Example of the models symposium paper).
+- Hierarchical_SM_BPMN.gps (Hierarchical composition example of the abstract).
 
 Groove [basic tutorial](https://www.youtube.com/watch?v=R2beaSQ9-NM&t=626s).

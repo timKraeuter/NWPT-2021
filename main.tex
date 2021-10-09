@@ -28,6 +28,10 @@
 %
 \author{
 Tim Kräuter
+\and
+Adrian Rutle
+\and
+Yngve Lamo
 }
 
 % Institutes for affiliations are also joined by \and,
@@ -72,21 +76,23 @@ Tim Kräuter
 \section{Introduction}
 % Introduction/Motivation
 A common approach to handle the increasing complexity of software systems is \gls*{mde}.
-\gls*{mde} leads to a clear separation of concerns by modeling each aspect of a system separately \cite{franceModeldrivenDevelopmentComplex2007}.
-However, these individual models must be composed to execute the system or argue about global properties \cite{kienzleUnifyingFrameworkHomogeneous2019}.
+\gls*{mde} envisions a clear separation of concerns by modeling each aspect of a system separately \cite{franceModeldrivenDevelopmentComplex2007}.
+However, these individual models must be composed to execute the system or reason about global properties \cite{kienzleUnifyingFrameworkHomogeneous2019}.
 
 % Narrowing down
-Our contribution addresses the problem of how the individual models can be composed into one model describing the entire software system, even if the used models are heterogeneous, i.e., do not conform to the same modeling language.
+Our contribution addresses the problem of how the individual models can be composed to describe the entire software system, even if the used models are heterogeneous, i.e., do not conform to the same modeling language.
 In particular, we address the composition of behavioral models since its structural counterpart has been the focus of a significant amount of research already, for example, in \cite{kienzleUnifyingFrameworkHomogeneous2019, klareCommonalitiesPreservingConsistency2019, stunkelComprehensiveSystemsFormal2021}.
 We further limit the behavioral models to those describing discrete behavior such as finite state machines, \gls*{bpmn} diagrams, process algebras, and Petri nets. % Untimed variants and only a subset of BPMN.
 
+% Motivation / Background
+
 \section{Heterogeneous behavioral model composition}
-We assume that each behavioral model describes a component of the overall system running independently and in parallel to other components as long as no relation to any other component is defined.
-However, components, i.e., behavioral models, must interact to realize a meaningful composite system behavior.
+We assume that each behavioral model describes a component of the overall system running independently and in parallel during the time it is not interacting with other components.
+Each component, i.e., behavioral model, should interact at least once with a different model to contribute to the composite system behavior.
 
 % We suggest 2 primitives to relate behavioral models: synchronous and asynchronous communication (currently without data).
 Our approach supports two types of interactions between behavioral models: \textit{synchronous} and \textit{asynchronous} communication.
-One can use synchronous communication to model that one component acquires a resource realized as a separate model since it is shared across the entire system.
+One can use synchronous communication to model that one component acquires a resource realized in a separate model since it is shared across the entire system.
 Asynchronous communication can, for example, be used to model that two components communicate using a messaging system or by writing/consuming files in a shared file system.
 Defining synchronous communication leads to two components becoming active simultaneously, while asynchronous communication only requires one component to be active. 
 
@@ -103,16 +109,16 @@ In the \textbf{second step} of our approach, we will use \glspl*{gg} to realize 
 However, one could also choose a different formalism than \glspl*{gg} in this step.
 
 For the second step, there has to be an implementation of each behavioral formalism using \glspl*{gg}.
-Implementations for finite state machines and Petri nets were defined in \cite{krauterBehavioralConsistencyHeterogeneous2021}.
-An implementation of the $\pi$-calculus process algebra using \glspl*{gg} is described in \cite{gadducciGraphRewritingPcalculus2007}, while \cite{rutleMetamodellingApproachBehavioural2012} describes how to executes workflow models using graph transformations.
+Implementations for finite state machines and Petri nets were, for example, defined in \cite{krauterBehavioralConsistencyHeterogeneous2021}.
+An implementation of the $\pi$-calculus process algebra using \glspl*{gg} is described in \cite{gadducciGraphRewritingPcalculus2007}, while \cite{rutleMetamodellingApproachBehavioural2012} describes how to execute workflow models using graph transformations.
 Consequently, we can (automatically) map each model to a \gls*{gg} which represents the behavior of that model.
 Afterward, all \glspl*{gg} are combined into one respecting the interactions defined earlier.
 
 The start graph of the \gls*{gg} describing the composite system is given by the sum of all start graphs of the individual \glspl*{gg}.
-The elements related in step one have been transformed to \gls*{gg} rules which will be combined.
+The set of \glspl*{gg} rules for the composite system depends on the defined interactions between the models because the rules corresponding to these elements will be combined.
 All non-related \gls*{gg} rules are kept unchanged for the composite system.
 
-Rules which are related by synchronous communication are merged into one \textit{parallel production rule}, formally defined using \gls*{ct} in \cite[Def. 3.2.7]{baldanConcurrentSemanticsAlgebraic1999}.
+Rules which are related by synchronous communication are amalgamated into one \textit{parallel production rule}, formally defined as a coproduct construction using \gls*{ct} in \cite[Def. 3.2.7]{baldanConcurrentSemanticsAlgebraic1999}.
 This forces both rules to be executed simultaneously in one rule application step. 
 An example of a rule created by synchronous communication can be seen on the left of \autoref{fig:synchAsynchInteractions}.
 Synchronous rules can have two or more participants from distinct behavioral models.  
@@ -126,17 +132,18 @@ Synchronous rules can have two or more participants from distinct behavioral mod
 
 Asynchronous communication will lead to rules being enriched, not merged.
 An asynchronous interaction has a direction and links only two model elements.
-It will lead to the creation and consumption of a unique message node. 
-An example can be seen on the right of \autoref{fig:synchAsynchInteractions}.
+It will lead to the creation and consumption of a unique message node.
+An example can be seen on the right of \autoref{fig:synchAsynchInteractions}. 
+One could also think about asynchronous messages from one model to a set of models, which creates multiple messages instead of only one message.
 Asynchronous communication influences the global system behavior by forcing two previously unrelated rules to be executed in a certain order.
 
 In addition, we are working towards including a structural model into our approach, which describes how many instances of each behavioral model exist and which of these instances are communicating with whom.
-This is useful because we do not want to duplicate similar behavioral models only to model that two instances of it exist in our system.
-However, this makes rule generation more complex since the objects representing instances of behavioral models have to be included.
+This is useful because we do not want to duplicate behavioral models only to model that two instances of it exist in our system.
+For example, if we have a state machine representing that a resource is acquired or not acquired, we do not want to duplicate this model for every resource in our system.
+However, including a structural model makes rule generation more complex since the objects representing instances of behavioral models have to be taken into account.
 
-\section{Use case: hierarchical composition}
-As a simple use case, we want to show how we can use our approach to implement the hierarchical composition of two behavioral models.
-The behavior of one behavioral model is often extended by other models that describe what happens in certain parts of the model in more detail.
+As a simple example, we want to show how we can use our approach to implement the hierarchical composition of two behavioral models.
+Often one wants to specify the behavior of one part of a model in more detail using a separate sub model.
 
 In \autoref{fig:useCase}, we have a state machine and a \gls*{bpmn} process model where the behavior of the state \texttt{Processing} is described by a \gls*{bpmn} process model.
 This means when the state \texttt{Processing} is entered, a \gls*{bpmn} process should be started, and the state can only be exited when this process has finished.
@@ -154,7 +161,7 @@ We created the \gls*{gg}, which describes the behavior of the composite system b
 
 \section{Related work}
 Most model composition tools only support structural model composition and do not take behavioral semantics into account \cite{kienzleUnifyingFrameworkHomogeneous2019}.
-This contribution extends our work in \cite{krauterBehavioralConsistencyHeterogeneous2021} by adding asynchronous communication and a use case showing how to implement hierarchical composition.
+This contribution extends our work in \cite{krauterBehavioralConsistencyHeterogeneous2021} by adding asynchronous communication and an example showing how to implement hierarchical composition.
 
 In \cite{kienzleUnifyingFrameworkHomogeneous2019}, event structures with event scheduling is proposed to realize behavioral combination.
 The authors also convert each behavioral model to their chosen formalism (event structures instead of \glspl*{gg}) and combine the models in that formalism.
